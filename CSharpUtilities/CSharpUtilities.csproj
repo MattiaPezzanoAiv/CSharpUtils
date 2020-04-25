@@ -50,6 +50,7 @@
     <Compile Include="Collections\UniqueQueue.cs" />
     <Compile Include="Events\EventHandler.cs" />
     <Compile Include="Events\EventManager.cs" />
+    <Compile Include="Extentions\Extensions.cs" />
     <Compile Include="ObjectPool\IPoolable.cs" />
     <Compile Include="ObjectPool\Pool.cs" />
     <Compile Include="ObjectPool\SimplePool.cs" />

@@ -1,7 +1,7 @@
 ﻿using System;
-using CSharpUtilities.Collections;
+using MP.CSharpUtilities.Collections;
 
-namespace CSharpUtilities.ObjectPool
+namespace MP.CSharpUtilities.ObjectPool
 {
     public sealed class Pool<T, TAllocator> 
         where T : IPoolable

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace CSharpUtilities.Collections
+namespace MP.CSharpUtilities.Collections
 {
     public class BaseUniqueCollection<T>
     {

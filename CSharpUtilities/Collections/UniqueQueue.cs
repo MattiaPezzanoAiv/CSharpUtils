@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CSharpUtilities.Collections
+namespace MP.CSharpUtilities.Collections
 {
     public class UniqueQueue<T> : BaseUniqueCollection<T>
     {

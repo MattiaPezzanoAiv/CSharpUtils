@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
-namespace CSharpUtilities.Collections
+namespace MP.CSharpUtilities.Collections
 {
     public sealed class UniqueList<T> : BaseUniqueCollection<T>
     {
