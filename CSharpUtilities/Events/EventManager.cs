@@ -177,5 +177,27 @@ namespace CSharpUtilities.Events
 
             return default;
         }
+
+        public static TResult RaiseWithResult<T, TResult>(int key, Func<T, TResult> action) where T : IEventHandler
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var type = typeof(T);
+            TResult result = default;
+
+            if (m_keyedHandlers.TryGetValue(key, out var handlers) && handlers.TryGetValue(type, out var entries))
+            {
+                // this is allowed only for keyed entries so we support a normal handler returning values from a specific object
+                foreach (var handler in entries)
+                {
+                    result = action((T)handler);
+                }
+            }
+
+            return result;
+        }
     }
 }

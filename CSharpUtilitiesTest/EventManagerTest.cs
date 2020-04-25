@@ -14,6 +14,12 @@ namespace CSharpUtilitiesTest
         public interface ITestEvent : IEventHandler
         {
             void TestFunc();
+
+        }
+
+        public interface ITestEventReturnValue : IEventHandler
+        {
+            int GetValue();
         }
 
         public interface IGlobalTestEvent : IGlobalEventHandler
@@ -25,10 +31,25 @@ namespace CSharpUtilitiesTest
         public class TestClass : ITestEvent
         {
             public int Called { get; set; }
-            
+
             public void TestFunc()
             {
                 Called++;
+            }
+        }
+
+        public class TestClassReturnValue : ITestEventReturnValue
+        {
+            private int val;
+
+            public TestClassReturnValue(int val)
+            {
+                this.val = val;
+            }
+
+            public int GetValue()
+            {
+                return val;
             }
         }
 
@@ -127,11 +148,22 @@ namespace CSharpUtilitiesTest
             Assert.Throws<ArgumentNullException>(() => EventManager.RaiseWithResult<IGlobalTestEvent, int>(null));
         }
 
-        // todo test raise with result
         [Test]
-        public void RaiseResult()
+        public void RaiseResultMultipleKeyed()
         {
-            var item = new GlobalTestClass();
+            var obj1 = new TestClassReturnValue(10);
+            var obj2 = new TestClassReturnValue(20);
+
+            int key1 = 1;
+            int key2 = 2;
+
+            EventManager.RegisterHandler<ITestEventReturnValue>(key2, obj1);
+            EventManager.RegisterHandler<ITestEventReturnValue>(key1, obj1);
+
+            var result = EventManager.RaiseWithResult<ITestEventReturnValue, int>(
+                key1, o => o.GetValue());
+
+            Assert.That(result, Is.EqualTo(10));
         }
     }
 }
