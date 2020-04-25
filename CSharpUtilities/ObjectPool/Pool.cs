@@ -3,16 +3,29 @@ using CSharpUtilities.Collections;
 
 namespace CSharpUtilities.ObjectPool
 {
-    public sealed class Pool<T> where T : IPoolable
+    public sealed class Pool<T, TAllocator> 
+        where T : IPoolable
+        where TAllocator : TPoolAllocator<T>, new()
     {
         private readonly UniqueQueue<T> m_items;
 
-        private readonly Func<T> m_createInstanceFunc;
+        private TAllocator m_allocator = new TAllocator();
 
-        public Pool(Func<T> createInstance, int capacity = 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="capacity">Preallocated elements in the pool. OnRecycle is called when the instance is preallocated</param>
+        public Pool(int capacity = 0)
         {
             m_items = new UniqueQueue<T>(capacity);
-            m_createInstanceFunc = createInstance;
+
+            // preallocate instances
+            for (int i = 0; i < capacity; i++)
+            {
+                var item = m_allocator.CreateNew();
+                item.OnRecycle();
+                m_items.Enqueue(item);
+            }
         }
 
         public int Available => m_items.Count;
@@ -26,7 +39,7 @@ namespace CSharpUtilities.ObjectPool
             T result;
             if (m_items.Count == 0)
             {
-                result = m_createInstanceFunc();
+                result = m_allocator.CreateNew();
             }
             else
             {

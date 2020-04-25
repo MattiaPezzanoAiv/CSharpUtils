@@ -12,4 +12,9 @@ namespace CSharpUtilities.ObjectPool
 
         void OnRecycle();
     }
+
+    public interface TPoolAllocator<T>
+    {
+        T CreateNew();
+    }
 }

@@ -8,7 +8,15 @@ using CSharpUtilities.ObjectPool;
 
 namespace CSharpUtilitiesTest
 {
-    class PoolableTest : IPoolable
+    public struct PoolableTestAllocator : TPoolAllocator<PoolableTest>
+    {
+        public PoolableTest CreateNew()
+        {
+            return new PoolableTest();
+        }
+    }
+
+    public class PoolableTest : IPoolable
     {
         public bool GetCalled { get; set; }
         public bool RecycleCalled { get; set; }
@@ -30,7 +38,7 @@ namespace CSharpUtilitiesTest
         [Test]
         public void Pool()
         {
-            var pool = new Pool<PoolableTest>(() => new PoolableTest());
+            var pool = new Pool<PoolableTest, PoolableTestAllocator>(0);
 
             Assert.That(pool.Available, Is.EqualTo(0));
 
